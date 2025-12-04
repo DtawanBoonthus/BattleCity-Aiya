@@ -1,0 +1,20 @@
+{
+    "name": "BC.UI",
+    "rootNamespace": "",
+    "references": [
+        "GUID:8831c3a55c5c28f4ea8b31fe1660b6dd"
+    ],
+    "includePlatforms": [
+        "Editor",
+        "WindowsStandalone64",
+        "WindowsStandalone64Server"
+    ],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}

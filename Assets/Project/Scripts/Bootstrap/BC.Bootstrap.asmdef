@@ -1,0 +1,23 @@
+{
+    "name": "BC.Bootstrap",
+    "rootNamespace": "BC.Bootstrap",
+    "references": [
+        "GUID:438b23d68136f224d940bd26ab8f0943",
+        "GUID:b86871a98eadc944fb6cf751b4f6169e",
+        "GUID:8831c3a55c5c28f4ea8b31fe1660b6dd",
+        "GUID:ab59be00d60974843a883a2258d26ec3"
+    ],
+    "includePlatforms": [
+        "Editor",
+        "WindowsStandalone64",
+        "WindowsStandalone64Server"
+    ],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}
