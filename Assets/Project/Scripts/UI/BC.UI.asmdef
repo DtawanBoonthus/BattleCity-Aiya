@@ -1,6 +1,6 @@
 {
     "name": "BC.UI",
-    "rootNamespace": "",
+    "rootNamespace": "BC.UI",
     "references": [
         "GUID:8831c3a55c5c28f4ea8b31fe1660b6dd"
     ],
