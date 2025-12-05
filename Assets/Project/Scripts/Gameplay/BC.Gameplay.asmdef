@@ -3,7 +3,8 @@
     "rootNamespace": "BC.Gameplay",
     "references": [
         "GUID:8831c3a55c5c28f4ea8b31fe1660b6dd",
-        "GUID:b0214a6008ed146ff8f122a6a9c2f6cc"
+        "GUID:b0214a6008ed146ff8f122a6a9c2f6cc",
+        "GUID:75469ad4d38634e559750d17036d5f7c"
     ],
     "includePlatforms": [
         "Editor",

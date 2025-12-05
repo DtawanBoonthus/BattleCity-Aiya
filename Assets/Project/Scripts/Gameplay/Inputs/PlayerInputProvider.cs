@@ -1,21 +1,26 @@
 ﻿using System;
 using BC.Shared.Inputs;
-using UnityEngine;
+using VContainer;
 using VContainer.Unity;
 
 namespace BC.Gameplay.Inputs;
 
 public partial class PlayerInputProvider : IInputProvider, IStartable, IDisposable
 {
-    public Vector2 Move { get; }
-    public bool IsAttack { get; }
+    [Inject] private PlayerInputAction Input { get; set; } = null!;
+
     public void Start()
     {
-        throw new NotImplementedException();
+        Input.Player.Enable();
+        BindMovementInput();
     }
 
     public void Dispose()
     {
-        throw new NotImplementedException();
+        Input.Player.Disable();
+        UnbindMovementInput();
     }
+
+    private partial void BindMovementInput();
+    private partial void UnbindMovementInput();
 }
