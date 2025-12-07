@@ -159,7 +159,7 @@ MonoBehaviour:
   ServerObjectManager: {fileID: 8745312083882865095}
   ClientObjectManager: {fileID: 4323366774544843561}
   SendAdditiveScenesOnAuthenticate: 1
-  DontDestroy: 1
+  DontDestroy: 0
   _onClientStartedSceneChange:
     m_PersistentCalls:
       m_Calls: []
