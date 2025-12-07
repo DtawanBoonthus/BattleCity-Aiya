@@ -1,5 +1,4 @@
-﻿using BC.Shared.Networks;
-using Mirage;
+﻿using Mirage;
 using UnityEngine;
 
 namespace BC.Bootstrap
@@ -11,9 +10,7 @@ namespace BC.Bootstrap
         protected override void Configure(IContainerBuilder builder)
         {
             new InputInstaller().Install(builder);
-
-            var networkContext = new NetworkContext(networkManager);
-            builder.RegisterInstance<INetworkContext>(networkContext);
+            builder.RegisterInstance(networkManager).AsSelf();
         }
     }
 }

@@ -220,7 +220,7 @@ MonoBehaviour:
   ClientObjectManager: {fileID: 4323366774544843561}
   ServerObjectManager: {fileID: 8745312083882865095}
   PlayerPrefab: {fileID: 6039733093614541389, guid: 754e801d72a75634482ad31810458fec, type: 3}
-  AutoSpawn: 1
+  AutoSpawn: 0
   SetName: 1
   startPositionIndex: 0
   startPositions: []

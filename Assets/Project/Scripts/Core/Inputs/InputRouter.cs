@@ -1,6 +1,7 @@
-﻿using UnityEngine;
+﻿using BC.Shared.Inputs;
+using UnityEngine;
 
-namespace BC.Shared.Inputs;
+namespace BC.Core.Inputs;
 
 public class InputRouter : IInputProvider
 {

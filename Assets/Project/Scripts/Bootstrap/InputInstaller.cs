@@ -1,4 +1,5 @@
 ﻿using System;
+using BC.Core.Inputs;
 using BC.Gameplay.Inputs;
 using BC.Shared.Inputs;
 

@@ -1,6 +1,7 @@
 {
   "dependencies": {
     "com.cysharp.csprojmodifier": "https://github.com/Cysharp/CsprojModifier.git?path=src/CsprojModifier/Assets/CsprojModifier",
+    "com.cysharp.zlinq": "https://github.com/Cysharp/ZLinq.git?path=src/ZLinq.Unity/Assets/ZLinq.Unity",
     "com.github-glitchenzo.nugetforunity": "4.5.0",
     "com.miragenet.mirage": "154.1.0",
     "com.unity.ai.navigation": "2.0.9",
