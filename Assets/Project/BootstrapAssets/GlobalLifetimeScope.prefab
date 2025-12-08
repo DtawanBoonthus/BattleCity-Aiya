@@ -50,6 +50,7 @@ MonoBehaviour:
   autoRun: 1
   autoInjectGameObjects: []
   networkManager: {fileID: 1599230905564234964}
+  udpSocketFactory: {fileID: 1615684747478809823}
 --- !u!1001 &5600352451385376593
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -116,6 +117,17 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 8aab4c8111b7c411b9b92cf3dbc5bd4e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &1615684747478809823 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 6617021875156255630, guid: f01845a2b9e214246aca8a26b88e6391, type: 3}
+  m_PrefabInstance: {fileID: 5600352451385376593}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d9f46b2d67d7a054d8c13075473bd4a2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
 --- !u!4 &6696294511567440766 stripped
