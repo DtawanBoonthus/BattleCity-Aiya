@@ -1,5 +1,4 @@
-﻿using BC.Core.Networks;
-using BC.Shared.Networks;
+﻿using BC.Shared.Spawners;
 using Mirage;
 using Mirage.Sockets.Udp;
 using UnityEngine;
@@ -10,16 +9,13 @@ namespace BC.Bootstrap
     {
         [SerializeField] private NetworkManager networkManager = null!;
         [SerializeField] private UdpSocketFactory udpSocketFactory = null!;
+        [SerializeField] private PrefabPoolConfig prefabPoolConfig = null!;
 
         protected override void Configure(IContainerBuilder builder)
         {
             new InputInstaller().Install(builder);
-            builder.RegisterInstance(networkManager).AsSelf();
-            builder.RegisterInstance(udpSocketFactory).AsSelf();
-
-            builder.Register<MirageNetworkConfig>(Lifetime.Singleton).As<INetworkConfig, IStartable>();
-            builder.Register<MirageNetworkContext>(Lifetime.Singleton).As<INetworkContext>();
-            builder.Register<MirageNetworkLifecycle>(Lifetime.Singleton).As<INetworkLifecycle>();
+            new NetworkInstaller(networkManager, udpSocketFactory).Install(builder);
+            new SpawnerInstaller(prefabPoolConfig).Install(builder);
         }
     }
 }

@@ -1,10 +1,12 @@
-﻿namespace BC.Shared.Networks;
+﻿using Cysharp.Threading.Tasks;
+
+namespace BC.Shared.Networks;
 
 public interface INetworkLifecycle
 {
-    void StartServer();
-    void StartClient(string address);
-    void StartHost();
+    UniTask<ConnectRoomStatus> StartServer();
+    UniTask<ConnectRoomStatus> StartClient(string address);
+    UniTask<ConnectRoomStatus> StartHost();
 
     void StopServer();
     void StopClient();
