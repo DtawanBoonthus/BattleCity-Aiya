@@ -8,7 +8,7 @@
     /// This type normally exists in .NET 5+.
     /// Unity projects using .NET Standard 2.1 must polyfill it manually.
     /// </summary>
-    internal sealed class IsExternalInit
+    public sealed class IsExternalInit
     {
     }
 }

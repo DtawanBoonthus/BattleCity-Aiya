@@ -48,4 +48,4 @@ MonoBehaviour:
     TypeName: BC.Bootstrap.GlobalLifetimeScope
   autoRun: 1
   autoInjectGameObjects: []
-  networkManager: {fileID: 6596065813322251141, guid: f01845a2b9e214246aca8a26b88e6391, type: 3}
+  gameplayConfig: {fileID: 11400000, guid: c441ad005b18fd842a116dc55a78a3cd, type: 2}

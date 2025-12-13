@@ -5,123 +5,121 @@ using Mirage;
 using VContainer;
 using VContainer.Unity;
 
-namespace BC.Core.Networks
+namespace BC.Core.Networks;
+
+public class MirageNetworkLifecycle : INetworkLifecycle, IStartable, IDisposable
 {
-    public class MirageNetworkLifecycle : INetworkLifecycle, IStartable, IDisposable
+    [Inject] private readonly NetworkManager networkManager = null!;
+
+    private UniTaskCompletionSource<ConnectRoomStatus>? connectTcs;
+    private bool waitingServer;
+    private bool waitingClient;
+
+    private const int TIMEOUT_MS = 5000;
+
+    public void Start()
     {
-        [Inject] private readonly NetworkManager networkManager = null!;
+        networkManager.Server.Started.AddListener(OnServerStarted);
+        networkManager.Client.Connected.AddListener(OnClientConnected);
+        networkManager.Client.Disconnected.AddListener(OnClientDisconnected);
+    }
 
-        private UniTaskCompletionSource<ConnectRoomStatus>? connectTcs;
-        private bool waitingServer;
-        private bool waitingClient;
+    public void Dispose()
+    {
+        networkManager.Server.Started.RemoveListener(OnServerStarted);
+        networkManager.Client.Connected.RemoveListener(OnClientConnected);
+        networkManager.Client.Disconnected.RemoveListener(OnClientDisconnected);
+    }
 
-        private const int TIMEOUT_MS = 5000;
+    public async UniTask<ConnectRoomStatus> StartServerAsync()
+    {
+        connectTcs = new UniTaskCompletionSource<ConnectRoomStatus>();
 
-        public void Start()
+        waitingServer = true;
+        waitingClient = false;
+
+        networkManager.Server.StartServer();
+
+        return await WaitOrTimeout();
+    }
+
+    public async UniTask<ConnectRoomStatus> StartClientAsync(string address)
+    {
+        connectTcs = new UniTaskCompletionSource<ConnectRoomStatus>();
+
+        waitingServer = false;
+        waitingClient = true;
+
+        networkManager.Client.Connect(address);
+
+        return await WaitOrTimeout();
+    }
+
+    public async UniTask<ConnectRoomStatus> StartHostAsync()
+    {
+        connectTcs = new UniTaskCompletionSource<ConnectRoomStatus>();
+
+        waitingServer = true;
+        waitingClient = true;
+
+        networkManager.Server.StartServer(networkManager.Client);
+
+        return await WaitOrTimeout();
+    }
+
+    public void StopServer()
+    {
+        networkManager.Server.Stop();
+    }
+
+    public void StopClient()
+    {
+        networkManager.Client.Disconnect();
+    }
+
+    private void OnServerStarted()
+    {
+        if (waitingServer)
         {
-            networkManager.Server.Started.AddListener(OnServerStarted);
-            networkManager.Client.Connected.AddListener(OnClientConnected);
-            networkManager.Client.Disconnected.AddListener(OnClientDisconnected);
-        }
-
-        public void Dispose()
-        {
-            networkManager.Server.Started.RemoveListener(OnServerStarted);
-            networkManager.Client.Connected.RemoveListener(OnClientConnected);
-            networkManager.Client.Disconnected.RemoveListener(OnClientDisconnected);
-        }
-
-        public async UniTask<ConnectRoomStatus> StartServer()
-        {
-            connectTcs = new UniTaskCompletionSource<ConnectRoomStatus>();
-
-            waitingServer = true;
-            waitingClient = false;
-
-            networkManager.Server.StartServer();
-
-            return await WaitOrTimeout();
-        }
-
-        public async UniTask<ConnectRoomStatus> StartClient(string address)
-        {
-            connectTcs = new UniTaskCompletionSource<ConnectRoomStatus>();
-
             waitingServer = false;
-            waitingClient = true;
-
-            networkManager.Client.Connect(address);
-
-            return await WaitOrTimeout();
+            TryFinishSuccess();
         }
+    }
 
-        public async UniTask<ConnectRoomStatus> StartHost()
+    private void OnClientConnected(INetworkPlayer player)
+    {
+        if (waitingClient)
         {
-            connectTcs = new UniTaskCompletionSource<ConnectRoomStatus>();
-
-            waitingServer = true;
-            waitingClient = true;
-
-            networkManager.Server.StartServer(networkManager.Client);
-
-            return await WaitOrTimeout();
+            waitingClient = false;
+            TryFinishSuccess();
         }
+    }
 
-        public void StopServer()
+    private void OnClientDisconnected(ClientStoppedReason reason)
+    {
+        connectTcs?.TrySetResult(ConnectRoomStatus.Failed);
+    }
+
+    private void TryFinishSuccess()
+    {
+        if (!waitingServer && !waitingClient)
         {
-            networkManager.Server.Stop();
+            connectTcs?.TrySetResult(ConnectRoomStatus.Success);
         }
+    }
 
-        public void StopClient()
+    private async UniTask<ConnectRoomStatus> WaitOrTimeout()
+    {
+        var connectTask = connectTcs!.Task.AsUniTask();
+        var timeoutTask = UniTask.Delay(TIMEOUT_MS);
+        var index = await UniTask.WhenAny(connectTask, timeoutTask);
+
+        if (index == 0)
         {
-            networkManager.Client.Disconnect();
+            return await connectTcs.Task;
         }
 
-        private void OnServerStarted()
-        {
-            if (waitingServer)
-            {
-                waitingServer = false;
-                TryFinishSuccess();
-            }
-        }
-
-        private void OnClientConnected(INetworkPlayer player)
-        {
-            if (waitingClient)
-            {
-                waitingClient = false;
-                TryFinishSuccess();
-            }
-        }
-
-        private void OnClientDisconnected(ClientStoppedReason reason)
-        {
-            connectTcs?.TrySetResult(ConnectRoomStatus.Failed);
-        }
-
-        private void TryFinishSuccess()
-        {
-            if (!waitingServer && !waitingClient)
-            {
-                connectTcs?.TrySetResult(ConnectRoomStatus.Success);
-            }
-        }
-
-        private async UniTask<ConnectRoomStatus> WaitOrTimeout()
-        {
-            var connectTask = connectTcs!.Task.AsUniTask();
-            var timeoutTask = UniTask.Delay(TIMEOUT_MS);
-
-            int index = await UniTask.WhenAny(connectTask, timeoutTask);
-
-            if (index == 0)
-            {
-                return await connectTcs.Task;
-            }
-
-            connectTcs.TrySetResult(ConnectRoomStatus.Timeout);
-            return ConnectRoomStatus.Timeout;
-        }
+        connectTcs.TrySetResult(ConnectRoomStatus.Timeout);
+        return ConnectRoomStatus.Timeout;
     }
 }

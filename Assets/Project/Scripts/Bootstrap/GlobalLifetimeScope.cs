@@ -2,6 +2,7 @@
 using Mirage;
 using Mirage.Sockets.Udp;
 using UnityEngine;
+using VitalRouter.VContainer;
 
 namespace BC.Bootstrap
 {
@@ -13,6 +14,8 @@ namespace BC.Bootstrap
 
         protected override void Configure(IContainerBuilder builder)
         {
+            builder.RegisterVitalRouter(_ => { });
+
             new InputInstaller().Install(builder);
             new NetworkInstaller(networkManager, udpSocketFactory).Install(builder);
             new SpawnerInstaller(prefabPoolConfig).Install(builder);

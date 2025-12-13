@@ -12,6 +12,7 @@ public class MirageSpawner : ISpawnService<MirageNet>
     [Inject] private readonly NetworkManager networkManager = null!;
     [Inject] private readonly IObjectResolver resolver = null!;
 
+    private readonly HashSet<int> registered = new();
     private readonly Dictionary<int, PrefabPool> pools = new();
     private readonly Transform poolRoot;
 
@@ -34,60 +35,53 @@ public class MirageSpawner : ISpawnService<MirageNet>
             var networkIdentity = item.Prefab.GetComponent<NetworkIdentity>();
             var hash = networkIdentity.PrefabHash;
 
-            var pool = new PrefabPool(
+            if (!registered.Contains(hash))
+            {
+                networkManager.ClientObjectManager.RegisterSpawnHandler(
+                    networkIdentity,
+                    spawnMessage => SpawnHandler(hash, spawnMessage),
+                    identity => UnSpawnHandler(hash, identity)
+                );
+
+                registered.Add(hash);
+            }
+
+            pools[hash] = new PrefabPool(
                 item.Prefab,
                 item.StartSize,
                 item.MaxSize,
                 item.Unlimited,
                 poolRoot
             );
+        }
+    }
 
-            pools[hash] = pool;
+    public void RegisterNetworkPrefab(IEnumerable<GameObject> items)
+    {
+        foreach (var item in items)
+        {
+            var networkIdentity = item.GetComponent<NetworkIdentity>();
+            var hash = networkIdentity.PrefabHash;
 
-            networkManager.ClientObjectManager.RegisterSpawnHandler(networkIdentity,
+            if (registered.Contains(hash))
+            {
+                return;
+            }
+
+            networkManager.ClientObjectManager.RegisterSpawnHandler(
+                networkIdentity,
                 spawnMessage => SpawnHandler(hash, spawnMessage),
                 identity => UnSpawnHandler(hash, identity)
             );
-        }
-    }
 
-    private NetworkIdentity SpawnHandler(int hash, SpawnMessage spawnMessage)
-    {
-        var spawnPosition = spawnMessage.SpawnValues.Position ?? Vector3.zero;
-        var spawnRotation = spawnMessage.SpawnValues.Rotation ?? Quaternion.identity;
-
-        if (pools.TryGetValue(hash, out var pool))
-        {
-            var gameObject = pool.Spawn(spawnPosition, spawnRotation);
-            resolver.InjectGameObject(gameObject);
-
-            return gameObject.GetComponent<NetworkIdentity>();
-        }
-
-        var prefab = networkManager.ClientObjectManager.GetSpawnHandler(hash).Prefab;
-        var fallback = Object.Instantiate(prefab, spawnPosition, spawnRotation);
-
-        resolver.InjectGameObject(fallback.gameObject);
-
-        return fallback;
-    }
-
-    private void UnSpawnHandler(int hash, NetworkIdentity identity)
-    {
-        if (pools.TryGetValue(hash, out var pool))
-        {
-            pool.Despawn(identity.gameObject);
-        }
-        else
-        {
-            Object.Destroy(identity.gameObject);
+            registered.Add(hash);
         }
     }
 
     public GameObject Spawn(GameObject prefab, Vector3 position, Quaternion rotation)
     {
-        var ni = prefab.GetComponent<NetworkIdentity>();
-        var hash = ni.PrefabHash;
+        var networkIdentity = prefab.GetComponent<NetworkIdentity>();
+        var hash = networkIdentity.PrefabHash;
 
         GameObject gameObject;
 
@@ -120,6 +114,36 @@ public class MirageSpawner : ISpawnService<MirageNet>
         else
         {
             Object.Destroy(instance);
+        }
+    }
+
+    private NetworkIdentity SpawnHandler(int hash, SpawnMessage spawnMessage)
+    {
+        var spawnPosition = spawnMessage.SpawnValues.Position ?? Vector3.zero;
+        var spawnRotation = spawnMessage.SpawnValues.Rotation ?? Quaternion.identity;
+
+        if (pools.TryGetValue(hash, out var pool))
+        {
+            var gameObject = pool.Spawn(spawnPosition, spawnRotation);
+            resolver.InjectGameObject(gameObject);
+            return gameObject.GetComponent<NetworkIdentity>();
+        }
+
+        var prefab = networkManager.ClientObjectManager.GetSpawnHandler(hash).Prefab;
+        var fallback = Object.Instantiate(prefab, spawnPosition, spawnRotation);
+        resolver.InjectGameObject(fallback.gameObject);
+        return fallback;
+    }
+
+    private void UnSpawnHandler(int hash, NetworkIdentity identity)
+    {
+        if (pools.TryGetValue(hash, out var pool))
+        {
+            pool.Despawn(identity.gameObject);
+        }
+        else
+        {
+            Object.Destroy(identity.gameObject);
         }
     }
 }

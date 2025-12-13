@@ -3,7 +3,7 @@ using UnityEngine;
 
 namespace BC.Shared.Spawners
 {
-    [CreateAssetMenu(fileName = "Prefab Pool Config", menuName = "BC/Prefab Pool Config")]
+    [CreateAssetMenu(fileName = "PrefabPoolConfig", menuName = "BC/Prefab Pool Config")]
     public class PrefabPoolConfig : ScriptableObject
     {
         [SerializeField] private List<PoolItem> items = new();
