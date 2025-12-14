@@ -10,39 +10,17 @@ using VitalRouter;
 
 namespace BC.Gameplay;
 
-[Routes]
-public sealed partial class MatchController : IStartable, IDisposable
+public class MatchController : IStartable, IDisposable
 {
     [Inject] private readonly ICommandPublisher publisher = null!;
     [Inject] private readonly INetworkConfig networkConfig = null!;
     [Inject] private readonly INetworkLifecycle networkLifecycle = null!;
     [Inject] private readonly INetworkRoomService roomService = null!;
     [Inject] private readonly INetworkContext networkContext = null!;
+    [Inject] private readonly MatchControllerRouter matchControllerRouter = null!;
 
     private CompositeDisposable? disposables;
     private const string LOG_PREFIX = $"[{nameof(MatchController)}]";
-
-    [Route]
-    private async UniTask OnGameModeCommand(GameModeCommand gameModeCommand)
-    {
-        var connectionStatus = gameModeCommand.GameMode switch
-        {
-            GameMode.Host => await networkLifecycle.StartHostAsync(),
-            GameMode.Client => await networkLifecycle.StartClientAsync(networkConfig.Address),
-            _ => ConnectRoomStatus.Failed
-        };
-
-        if (connectionStatus == ConnectRoomStatus.Failed)
-        {
-            Debug.LogError($"{LOG_PREFIX} Failed to connect to server.");
-            return;
-        }
-
-        if (networkContext.IsServer)
-        {
-            StartServerGameAsync().Forget();
-        }
-    }
 
     public void Start()
     {
@@ -57,6 +35,8 @@ public sealed partial class MatchController : IStartable, IDisposable
     private void HandlePlayerCountForGameStart()
     {
         disposables ??= new CompositeDisposable();
+
+        matchControllerRouter.OnGameModeCommand.Subscribe(OnGameModeCommand);
 
         roomService.PlayerCount
             .Where(_ => networkContext.IsServer)
@@ -73,6 +53,34 @@ public sealed partial class MatchController : IStartable, IDisposable
             }).AddTo(disposables);
     }
 
+    private void OnGameModeCommand(GameMode gameMode)
+    {
+        HandleGameModeConnection(gameMode).Forget();
+    }
+
+    private async UniTask HandleGameModeConnection(GameMode gameMode)
+    {
+        var connectionStatus = gameMode switch
+        {
+            GameMode.Host => await networkLifecycle.StartHostAsync(),
+            GameMode.Client => await networkLifecycle.StartClientAsync(networkConfig.Address),
+            _ => ConnectRoomStatus.Failed
+        };
+
+        if (connectionStatus == ConnectRoomStatus.Failed)
+        {
+            Debug.LogError($"{LOG_PREFIX} Failed to connect to server.");
+            return;
+        }
+
+        ConnectGameSuccessAsync().Forget();
+
+        if (networkContext.IsServer)
+        {
+            StartServerGameAsync().Forget();
+        }
+    }
+
     private async UniTask StartServerGameAsync()
     {
         await publisher.PublishAsync(new GameStartServerCommand());
@@ -81,5 +89,10 @@ public sealed partial class MatchController : IStartable, IDisposable
     private async UniTask StartGameAsync()
     {
         await publisher.PublishAsync(new GameStartCommand());
+    }
+
+    private async UniTask ConnectGameSuccessAsync()
+    {
+        await publisher.PublishAsync(new ConnectGameSuccess());
     }
 }

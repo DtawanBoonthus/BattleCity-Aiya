@@ -2,6 +2,7 @@
 using BC.Gameplay;
 using BC.Gameplay.Configs;
 using BC.Shared.Spawners;
+using BC.UI;
 using UnityEngine;
 using VitalRouter.VContainer;
 
@@ -23,10 +24,12 @@ namespace BC.Bootstrap
             builder.RegisterVitalRouter(routing =>
             {
                 routing.Map<GameController>();
-                routing.Map<MatchController>();
+                routing.Map<MatchControllerRouter>();
+                routing.Map<GameModeViewModelRouter>();
             });
 
             builder.Register<MatchController>(Lifetime.Scoped).As<IStartable, IDisposable>();
+            builder.Register<GameModeViewModel>(Lifetime.Scoped).As<IGameModeViewModel>();
         }
     }
 }

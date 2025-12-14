@@ -22,9 +22,9 @@ public class NetworkInstaller : IInstaller
         builder.RegisterInstance(networkManager).AsSelf();
         builder.RegisterInstance(udpSocketFactory).AsSelf();
 
-        builder.Register<MirageNetworkConfig>(Lifetime.Singleton).As<INetworkConfig>();
-        builder.Register<MirageNetworkContext>(Lifetime.Singleton).As<INetworkContext>();
-        builder.Register<MirageNetworkLifecycle>(Lifetime.Singleton).As<INetworkLifecycle, IStartable, IDisposable>();
-        builder.Register<MirageNetworkRoomService>(Lifetime.Singleton).As<INetworkRoomService, IStartable, IDisposable>();
+        builder.Register<INetworkConfig, MirageNetworkConfig>(Lifetime.Singleton);
+        builder.Register<INetworkContext, MirageNetworkContext>(Lifetime.Singleton);
+        builder.Register<INetworkLifecycle, MirageNetworkLifecycle>(Lifetime.Singleton).As<IStartable, IDisposable>();
+        builder.Register<INetworkRoomService, MirageNetworkRoomService>(Lifetime.Singleton).As<IStartable, IDisposable>();
     }
 }

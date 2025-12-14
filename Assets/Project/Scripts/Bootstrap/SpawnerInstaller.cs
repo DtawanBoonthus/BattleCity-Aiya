@@ -14,7 +14,7 @@ public class SpawnerInstaller : IInstaller
 
     public void Install(IContainerBuilder builder)
     {
-        builder.Register<MirageSpawner>(Lifetime.Singleton).As<ISpawnService<MirageNet>>();
+        builder.Register<ISpawnService<MirageNet>, MirageSpawner>(Lifetime.Singleton);
 
         builder.RegisterBuildCallback(container =>
         {

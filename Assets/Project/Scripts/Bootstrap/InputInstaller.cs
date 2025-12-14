@@ -11,14 +11,11 @@ public class InputInstaller : IInstaller
     {
         builder.Register<PlayerInputAction>(Lifetime.Singleton);
 
-        builder.Register<InputRouter>(Lifetime.Singleton)
-            .As<IInputProvider>()
-            .AsSelf();
+        builder.Register<IInputProvider, InputRouter>(Lifetime.Singleton).AsSelf();
 
         builder.Register<PlayerInputProvider>(Lifetime.Singleton)
             .AsSelf()
-            .As<IStartable>()
-            .As<IDisposable>();
+            .As<IStartable, IDisposable>();
 
         builder.RegisterBuildCallback(container =>
         {
