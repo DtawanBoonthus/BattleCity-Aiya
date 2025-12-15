@@ -128,6 +128,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 29826400}
+  - component: {fileID: 29826401}
   m_Layer: 0
   m_Name: SpawnPosition
   m_TagString: Untagged
@@ -152,6 +153,21 @@ Transform:
   - {fileID: 2104202214}
   m_Father: {fileID: 1588792480}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &29826401
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 29826399}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a4d1e98ccb9149afbae5f2a5bab2c803, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  spawnPositions:
+  - {fileID: 1512408698}
+  - {fileID: 2104202214}
 --- !u!1 &50623903
 GameObject:
   m_ObjectHideFlags: 0
@@ -1860,6 +1876,14 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 7700859624254170629, guid: 150fff29a43da4549937156abd6896b0, type: 3}
+      propertyPath: spawnPosition
+      value: 
+      objectReference: {fileID: 29826401}
+    - target: {fileID: 7700859624254170629, guid: 150fff29a43da4549937156abd6896b0, type: 3}
+      propertyPath: prefabPoolConfig
+      value: 
+      objectReference: {fileID: 11400000, guid: 66d83aa2c07407e478b70048a680c292, type: 2}
     - target: {fileID: 7700859624254170629, guid: 150fff29a43da4549937156abd6896b0, type: 3}
       propertyPath: gameStartCountdown
       value: 

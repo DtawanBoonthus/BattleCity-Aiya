@@ -26,7 +26,7 @@ public partial class GameControllerRouter
     [Route]
     private UniTask OnGameStartServerCommand(GameStartServerCommand gameStartServerCommand)
     {
-        var gameGameController = spawnService.Spawn(gameplayConfig.GameControllerPrefab, Vector3.zero, Quaternion.identity);
+        var gameControllerObj = spawnService.Spawn(gameplayConfig.GameControllerPrefab, Vector3.zero, Quaternion.identity);
 
         var gameStartCountdown = spawnService.Spawn(gameplayConfig.GameStartCountdownPrefab, Vector3.zero, Quaternion.identity);
         GameStartCountdown = gameStartCountdown.GetComponent<IGameStartCountdown>();

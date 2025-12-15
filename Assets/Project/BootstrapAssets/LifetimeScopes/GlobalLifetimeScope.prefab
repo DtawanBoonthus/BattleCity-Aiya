@@ -49,10 +49,8 @@ MonoBehaviour:
     TypeName: 
   autoRun: 1
   autoInjectGameObjects: []
-  gameplayConfig: {fileID: 11400000, guid: c441ad005b18fd842a116dc55a78a3cd, type: 2}
   networkManager: {fileID: 1599230905564234964}
   udpSocketFactory: {fileID: 1615684747478809823}
-  prefabPoolConfig: {fileID: 11400000, guid: 66d83aa2c07407e478b70048a680c292, type: 2}
 --- !u!1001 &5600352451385376593
 PrefabInstance:
   m_ObjectHideFlags: 0
