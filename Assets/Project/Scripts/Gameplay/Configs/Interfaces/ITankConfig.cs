@@ -2,5 +2,8 @@
 
 public interface ITankConfig
 {
-    float StartSpeed { get; }
+    float StartMoveSpeed { get; }
+    int MaxHealth { get; }
+    float FireCooldown { get; }
+    float IFrameTime { get; }
 }

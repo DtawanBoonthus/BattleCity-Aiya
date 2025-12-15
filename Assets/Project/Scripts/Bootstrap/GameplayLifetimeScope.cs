@@ -14,12 +14,12 @@ namespace BC.Bootstrap
         [SerializeField] private SpawnPosition spawnPosition = null!;
         [SerializeField] private PrefabPoolConfig prefabPoolConfig = null!;
         [SerializeField] private TankConfig tankConfig = null!;
+        [SerializeField] private BulletConfig bulletConfig = null!;
 
         protected override void Configure(IContainerBuilder builder)
         {
-            builder.RegisterInstance(tankConfig)
-                .As<ITankConfig>()
-                .AsSelf();
+            builder.RegisterInstance(tankConfig).As<ITankConfig>().AsSelf();
+            builder.RegisterInstance(bulletConfig).As<IBulletConfig>().AsSelf();
 
             builder.RegisterBuildCallback(container =>
             {

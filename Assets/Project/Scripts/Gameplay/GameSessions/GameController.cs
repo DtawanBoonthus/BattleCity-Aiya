@@ -85,12 +85,9 @@ namespace BC.Gameplay
                 var player = players[i];
                 var spawnPos = spawnLocations.SpawnPositions[i];
 
-                var tankObj = spawnService.Spawn(
-                    gameplayConfig.TankPrefab,
-                    spawnPos.position,
-                    Quaternion.identity,
-                    player
-                );
+                var tankObj = spawnService.Spawn(gameplayConfig.TankPrefab, spawnPos.position, Quaternion.identity, player);
+                var tankRender = tankObj.GetComponent<TankRender>();
+                tankRender.RPC_SetSprite(i);
             }
 
             return UniTask.CompletedTask;

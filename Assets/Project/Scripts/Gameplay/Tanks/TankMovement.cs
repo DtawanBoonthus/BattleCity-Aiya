@@ -45,7 +45,7 @@ namespace BC.Gameplay.Tanks
         [Server]
         private void ServerMove()
         {
-            var position = rb2D.position + currentInput * tankConfig.StartSpeed * Time.fixedDeltaTime;
+            var position = rb2D.position + currentInput * tankConfig.StartMoveSpeed * Time.fixedDeltaTime;
             rb2D.MovePosition(position);
         }
 

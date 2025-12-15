@@ -52,3 +52,4 @@ MonoBehaviour:
   spawnPosition: {fileID: 0}
   prefabPoolConfig: {fileID: 11400000, guid: 66d83aa2c07407e478b70048a680c292, type: 2}
   tankConfig: {fileID: 11400000, guid: 5c4d636de13c1c44da0ca82600341e2f, type: 2}
+  bulletConfig: {fileID: 11400000, guid: 5b8a71fc26aaeff48bdcde7db5b477ca, type: 2}
