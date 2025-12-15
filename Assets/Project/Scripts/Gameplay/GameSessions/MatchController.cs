@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Threading;
+using System.Threading.Tasks;
 using BC.Shared.GameSessions;
 using BC.Shared.Networks;
 using Cysharp.Threading.Tasks;
@@ -36,7 +38,7 @@ public class MatchController : IStartable, IDisposable
     {
         disposables ??= new CompositeDisposable();
 
-        matchControllerRouter.OnGameModeCommand.Subscribe(OnGameModeCommand);
+        matchControllerRouter.OnGameModeCommand.SubscribeAwait(OnGameModeCommand).AddTo(disposables);
 
         roomService.PlayerCount
             .Where(_ => networkContext.IsServer)
@@ -53,12 +55,7 @@ public class MatchController : IStartable, IDisposable
             }).AddTo(disposables);
     }
 
-    private void OnGameModeCommand(GameMode gameMode)
-    {
-        HandleGameModeConnection(gameMode).Forget();
-    }
-
-    private async UniTask HandleGameModeConnection(GameMode gameMode)
+    private async ValueTask OnGameModeCommand(GameMode gameMode, CancellationToken cancellationToken)
     {
         var connectionStatus = gameMode switch
         {

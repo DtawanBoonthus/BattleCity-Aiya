@@ -26,10 +26,12 @@ namespace BC.Bootstrap
                 routing.Map<GameController>();
                 routing.Map<MatchControllerRouter>();
                 routing.Map<GameModeViewModelRouter>();
+                routing.Map<GameStartCountdownViewModelRouter>();
             });
 
             builder.Register<MatchController>(Lifetime.Scoped).As<IStartable, IDisposable>();
-            builder.Register<GameModeViewModel>(Lifetime.Scoped).As<IGameModeViewModel>();
+            builder.Register<IGameModeViewModel, GameModeViewModel>(Lifetime.Scoped);
+            builder.Register<IGameStartCountdownViewModel, GameStartCountdownViewModel>(Lifetime.Scoped).As<IStartable, IDisposable>();
         }
     }
 }

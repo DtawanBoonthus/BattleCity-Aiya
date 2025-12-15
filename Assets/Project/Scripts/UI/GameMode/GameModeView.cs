@@ -51,7 +51,6 @@ namespace BC.UI
 
         private void OnConnectSuccess(Unit _)
         {
-            Debug.LogWarning("Connect Success");
             gameObject.SetActive(false);
         }
     }
