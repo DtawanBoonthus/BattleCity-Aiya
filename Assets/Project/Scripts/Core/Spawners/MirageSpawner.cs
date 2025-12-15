@@ -60,6 +60,12 @@ public class MirageSpawner : ISpawnService<MirageNet>
     {
         foreach (var item in items)
         {
+            if (item == null)
+            {
+                Debug.LogWarning($"Network prefab is null. {nameof(item)}");
+                continue;
+            }
+
             var networkIdentity = item.GetComponent<NetworkIdentity>();
             var hash = networkIdentity.PrefabHash;
 

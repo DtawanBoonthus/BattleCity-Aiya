@@ -11,12 +11,23 @@ namespace BC.Gameplay.Configs
         [Space] [SerializeField] private List<Sprite> tanksSprites = new();
         [SerializeField] private GameObject tankPrefab = null!;
         [SerializeField] private GameObject bulletPrefab = null!;
+        [SerializeField] private GameObject gameControllerPrefab = null!;
         [SerializeField] private GameObject gameStartCountdownPrefab = null!;
 
         public int StartGameDurationSecond => startGameDurationSecond;
         public IReadOnlyList<Sprite> TanksSprites => tanksSprites;
         public GameObject TankPrefab => tankPrefab;
         public GameObject BulletPrefab => bulletPrefab;
+        public GameObject GameControllerPrefab => gameControllerPrefab;
         public GameObject GameStartCountdownPrefab => gameStartCountdownPrefab;
+
+        public IEnumerable<GameObject> NetworkPrefabs => new[]
+        {
+            tankPrefab,
+            bulletPrefab,
+            gameStartCountdownPrefab,
+            gameControllerPrefab,
+            gameStartCountdownPrefab
+        };
     }
 }

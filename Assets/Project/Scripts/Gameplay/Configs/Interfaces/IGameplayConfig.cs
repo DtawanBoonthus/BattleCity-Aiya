@@ -9,5 +9,7 @@ public interface IGameplayConfig
     IReadOnlyList<Sprite> TanksSprites { get; }
     GameObject TankPrefab { get; }
     GameObject BulletPrefab { get; }
+    GameObject GameControllerPrefab { get; }
     GameObject GameStartCountdownPrefab { get; }
+    IEnumerable<GameObject> NetworkPrefabs { get; }
 }

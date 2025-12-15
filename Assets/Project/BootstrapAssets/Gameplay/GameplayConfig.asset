@@ -18,4 +18,5 @@ MonoBehaviour:
   - {fileID: 21300000, guid: 6489596405c25ef4db1180f439e28f6b, type: 3}
   tankPrefab: {fileID: 2213379139008539652, guid: 754e801d72a75634482ad31810458fec, type: 3}
   bulletPrefab: {fileID: 0}
+  gameControllerPrefab: {fileID: 4158598972686363649, guid: af2fec71208147845894025e65835def, type: 3}
   gameStartCountdownPrefab: {fileID: 7732782564445786328, guid: d23b0e3f66b4a3f4d84278ef24d82b23, type: 3}
