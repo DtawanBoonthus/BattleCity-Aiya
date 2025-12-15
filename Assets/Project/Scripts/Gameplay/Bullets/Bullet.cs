@@ -1,4 +1,5 @@
 ﻿using BC.Gameplay.Configs;
+using BC.Gameplay.Damageable;
 using BC.Shared.Spawners;
 using Mirage;
 using UnityEngine;
@@ -12,13 +13,15 @@ namespace BC.Gameplay
         [Inject] private readonly ISpawnService<MirageNet> spawnService = null!;
 
         private Vector2 direction;
+        private uint ownerId;
 
         [Server]
-        public void Init(Vector2 direction)
+        public void Init(Vector3 firePosition, Vector2 direction, uint ownerId)
         {
+            this.ownerId = ownerId;
             this.direction = direction.normalized;
+            transform.position = firePosition;
         }
-
 
         private void Update()
         {
@@ -48,7 +51,19 @@ namespace BC.Gameplay
                 return false;
             }
 
-            // TODO: damage / wall logic
+            var damageable = hit.collider.gameObject.GetComponentInParent<IDamageable>();
+
+            if (damageable != null)
+            {
+                var netId = hit.collider.gameObject.GetComponentInParent<NetworkBehaviour>().NetId;
+                if (netId == ownerId)
+                {
+                    return false;
+                }
+
+                damageable.TakeDamage(bulletConfig.Damage);
+            }
+
             Destroy();
             return true;
         }
