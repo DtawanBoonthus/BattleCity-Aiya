@@ -62,7 +62,7 @@ public class MirageSpawner : ISpawnService<MirageNet>
         {
             if (item == null)
             {
-                Debug.LogWarning($"Network prefab is null. {nameof(item)}");
+                Debug.LogWarning($"Network prefab is null.");
                 continue;
             }
 
@@ -84,7 +84,7 @@ public class MirageSpawner : ISpawnService<MirageNet>
         }
     }
 
-    public GameObject Spawn(GameObject prefab, Vector3 position, Quaternion rotation)
+    public GameObject Spawn(GameObject prefab, Vector3 position, Quaternion rotation, INetworkPlayer? owner = null)
     {
         var networkIdentity = prefab.GetComponent<NetworkIdentity>();
         var hash = networkIdentity.PrefabHash;
@@ -102,7 +102,15 @@ public class MirageSpawner : ISpawnService<MirageNet>
             resolver.InjectGameObject(gameObject);
         }
 
-        networkManager.ServerObjectManager.Spawn(gameObject.GetComponent<NetworkIdentity>());
+        if (owner == null)
+        {
+            networkManager.ServerObjectManager.Spawn(gameObject.GetComponent<NetworkIdentity>());
+        }
+        else
+        {
+            networkManager.ServerObjectManager.Spawn(gameObject.GetComponent<NetworkIdentity>(), owner);
+        }
+
         return gameObject;
     }
 

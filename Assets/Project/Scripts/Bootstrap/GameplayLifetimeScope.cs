@@ -13,9 +13,14 @@ namespace BC.Bootstrap
         [SerializeField] private GameplayConfig gameplayConfig = null!;
         [SerializeField] private SpawnPosition spawnPosition = null!;
         [SerializeField] private PrefabPoolConfig prefabPoolConfig = null!;
+        [SerializeField] private TankConfig tankConfig = null!;
 
         protected override void Configure(IContainerBuilder builder)
         {
+            builder.RegisterInstance(tankConfig)
+                .As<ITankConfig>()
+                .AsSelf();
+
             builder.RegisterBuildCallback(container =>
             {
                 var spawnService = container.Resolve<ISpawnService<MirageNet>>();

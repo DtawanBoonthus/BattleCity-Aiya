@@ -49,3 +49,6 @@ MonoBehaviour:
   autoRun: 1
   autoInjectGameObjects: []
   gameplayConfig: {fileID: 11400000, guid: c441ad005b18fd842a116dc55a78a3cd, type: 2}
+  spawnPosition: {fileID: 0}
+  prefabPoolConfig: {fileID: 11400000, guid: 66d83aa2c07407e478b70048a680c292, type: 2}
+  tankConfig: {fileID: 11400000, guid: 5c4d636de13c1c44da0ca82600341e2f, type: 2}

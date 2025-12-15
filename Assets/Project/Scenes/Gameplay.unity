@@ -1881,10 +1881,6 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 29826401}
     - target: {fileID: 7700859624254170629, guid: 150fff29a43da4549937156abd6896b0, type: 3}
-      propertyPath: prefabPoolConfig
-      value: 
-      objectReference: {fileID: 11400000, guid: 66d83aa2c07407e478b70048a680c292, type: 2}
-    - target: {fileID: 7700859624254170629, guid: 150fff29a43da4549937156abd6896b0, type: 3}
       propertyPath: gameStartCountdown
       value: 
       objectReference: {fileID: 8191330456075677819, guid: d23b0e3f66b4a3f4d84278ef24d82b23, type: 3}

@@ -1,12 +1,14 @@
 ﻿using System.Threading;
 using System.Threading.Tasks;
 using BC.Gameplay.Configs;
+using BC.Gameplay.Tanks;
 using BC.Shared.Spawners;
 using Cysharp.Threading.Tasks;
 using Mirage;
 using R3;
 using UnityEngine;
 using VContainer;
+using ZLinq;
 
 namespace BC.Gameplay
 {
@@ -67,18 +69,31 @@ namespace BC.Gameplay
         }
 
         [Server]
-        private async UniTask SpawnTankAsync()
+        private UniTask SpawnTankAsync()
         {
             if (!IsServer)
             {
-                return;
+                return UniTask.CompletedTask;
             }
 
-            for (int i = 0; i < networkManager.Server.AllPlayers.Count; i++)
+            var players = networkManager.Server.AllPlayers
+                .Where(p => p.Identity != null)
+                .ToList();
+
+            for (int i = 0; i < players.Count; i++)
             {
-                var currentPosition = spawnLocations.SpawnPositions[i];
-                var tank = spawnService.Spawn(gameplayConfig.TankPrefab, currentPosition.position, Quaternion.identity);
+                var player = players[i];
+                var spawnPos = spawnLocations.SpawnPositions[i];
+
+                var tankObj = spawnService.Spawn(
+                    gameplayConfig.TankPrefab,
+                    spawnPos.position,
+                    Quaternion.identity,
+                    player
+                );
             }
+
+            return UniTask.CompletedTask;
         }
     }
 }
