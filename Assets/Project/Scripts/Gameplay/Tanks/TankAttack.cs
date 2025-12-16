@@ -1,9 +1,11 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using BC.Gameplay.Configs;
 using BC.Gameplay.Damageable;
 using BC.Shared.Inputs;
 using BC.Shared.Spawners;
 using Mirage;
+using R3;
 using UnityEngine;
 using VContainer;
 
@@ -12,6 +14,7 @@ namespace BC.Gameplay.Tanks
     public class TankAttack : NetworkBehaviour
     {
         [SerializeField] private Transform firePosition = null!;
+        [SerializeField] private TankHitReactionController hitReactionController = null!;
 
         [Inject] private readonly IInputProvider inputProvider = null!;
         [Inject] private readonly ISpawnService<Normal> spawnService = null!;
@@ -22,6 +25,9 @@ namespace BC.Gameplay.Tanks
 
         private double lastFireTime;
         private uint bulletCounter;
+        private CompositeDisposable? destroyDisposables;
+
+        private readonly List<ServerBullet> activeBullets = new();
 
         private struct ServerBullet
         {
@@ -31,12 +37,20 @@ namespace BC.Gameplay.Tanks
             public uint OwnerId;
         }
 
-        private readonly List<ServerBullet> activeBullets = new();
+        private void Start()
+        {
+            destroyDisposables ??= new CompositeDisposable();
+        }
 
+        private void OnDestroy()
+        {
+            destroyDisposables?.Dispose();
+            destroyDisposables = null;
+        }
 
         private void Update()
         {
-            if (!HasAuthority)
+            if (!HasAuthority || hitReactionController.IsStaggered)
             {
                 return;
             }
@@ -122,7 +136,21 @@ namespace BC.Gameplay.Tanks
                 return false;
             }
 
-            damageable.TakeDamage(networkBehaviour.NetId, bulletConfig.Damage);
+            var iframe = hit.collider.GetComponentInParent<IIFrame>();
+
+            switch (iframe)
+            {
+                case { IsIFrame: false }:
+                    damageable.TakeDamage(networkBehaviour.NetId, bulletConfig.Damage);
+                    iframe.IFrame(tankConfig.IFrameTime);
+                    break;
+                case { IsIFrame: true }:
+                    return false;
+            }
+
+            var stagger = hit.collider.GetComponentInParent<IStagger>();
+            stagger?.Stagger(bulletConfig.StaggerTime);
+
             Rpc_DespawnBulletVisual(bullet.BulletId);
             return true;
         }

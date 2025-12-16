@@ -15,4 +15,4 @@ MonoBehaviour:
   startMoveSpeed: 5
   maxHealth: 3
   fireCooldown: 0.2
-  iframeTime: 0.02
+  iframeTime: 4

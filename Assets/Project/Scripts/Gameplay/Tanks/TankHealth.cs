@@ -2,6 +2,7 @@
 using BC.Gameplay.Damageable;
 using Cysharp.Threading.Tasks;
 using Mirage;
+using R3;
 using UnityEngine;
 using VContainer;
 using VitalRouter;
@@ -14,15 +15,24 @@ namespace BC.Gameplay.Tanks
         [Inject] private readonly ITankConfig tankConfig = null!;
 
         [SyncVar(hook = nameof(OnHpChanged))] private int currentHealth;
+        private CompositeDisposable? destroyDisposables;
 
         private void Start()
         {
+            destroyDisposables ??= new CompositeDisposable();
+
             if (!IsServer)
             {
                 return;
             }
 
             currentHealth = tankConfig.MaxHealth;
+        }
+
+        private void OnDestroy()
+        {
+            destroyDisposables?.Dispose();
+            destroyDisposables = null;
         }
 
         [Server]

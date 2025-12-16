@@ -1,6 +1,7 @@
 ﻿using BC.Gameplay.Configs;
 using BC.Shared.Inputs;
 using Mirage;
+using R3;
 using UnityEngine;
 using VContainer;
 
@@ -9,15 +10,28 @@ namespace BC.Gameplay.Tanks
     public class TankMovement : NetworkBehaviour
     {
         [SerializeField] private Rigidbody2D rb2D = null!;
+        [SerializeField] private TankHitReactionController hitReactionController = null!;
 
         [Inject] private readonly IInputProvider inputProvider = null!;
         [Inject] private readonly ITankConfig tankConfig = null!;
 
         private Vector2 currentInput;
+        private CompositeDisposable? destroyDisposables;
+
+        private void Start()
+        {
+            destroyDisposables ??= new CompositeDisposable();
+        }
+
+        private void OnDestroy()
+        {
+            destroyDisposables?.Dispose();
+            destroyDisposables = null;
+        }
 
         private void Update()
         {
-            if (!HasAuthority)
+            if (!HasAuthority || hitReactionController.IsStaggered)
             {
                 return;
             }
@@ -27,7 +41,7 @@ namespace BC.Gameplay.Tanks
 
         private void FixedUpdate()
         {
-            if (!IsServer)
+            if (!IsServer || hitReactionController.IsStaggered)
             {
                 return;
             }

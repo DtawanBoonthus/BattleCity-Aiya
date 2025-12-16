@@ -1,5 +1,4 @@
-﻿using System;
-using R3;
+﻿using R3;
 using TMPro;
 using UnityEngine;
 using VContainer;

@@ -10,8 +10,12 @@ namespace BC.UI;
 public partial class TankWorldUIRouter
 {
     private readonly ReactiveProperty<IReadOnlyDictionary<uint, int>> hps = new(new Dictionary<uint, int>());
+    private readonly ReactiveProperty<IReadOnlyDictionary<uint, int>> staggers = new(new Dictionary<uint, int>());
+    private readonly ReactiveProperty<IReadOnlyDictionary<uint, float>> iframes = new(new Dictionary<uint, float>());
 
     public ReadOnlyReactiveProperty<IReadOnlyDictionary<uint, int>> Hps => hps;
+    public ReadOnlyReactiveProperty<IReadOnlyDictionary<uint, int>> Staggers => staggers;
+    public ReadOnlyReactiveProperty<IReadOnlyDictionary<uint, float>> Iframes => iframes;
 
 
     [Route]
@@ -23,6 +27,58 @@ public partial class TankWorldUIRouter
         };
 
         hps.Value = dict;
+
+        return UniTask.CompletedTask;
+    }
+
+    [Route]
+    private UniTask UpdateStagger(StaggerCommand command)
+    {
+        var dict = new Dictionary<uint, int>(staggers.Value)
+        {
+            [command.NetId] = command.StaggerTime
+        };
+
+        staggers.Value = dict;
+
+        return UniTask.CompletedTask;
+    }
+
+    [Route]
+    private UniTask UpdateStagger(EndStaggerCommand command)
+    {
+        var dict = new Dictionary<uint, int>(staggers.Value)
+        {
+            [command.NetId] = -1
+        };
+
+        staggers.Value = dict;
+
+        return UniTask.CompletedTask;
+    }
+
+    [Route]
+    private UniTask UpdateIFrame(IFrameCommand command)
+    {
+        var dict = new Dictionary<uint, float>(iframes.Value)
+        {
+            [command.NetId] = command.IFrameTime
+        };
+
+        iframes.Value = dict;
+
+        return UniTask.CompletedTask;
+    }
+
+    [Route]
+    private UniTask UpdateIFrame(EndIFrameCommand command)
+    {
+        var dict = new Dictionary<uint, int>(staggers.Value)
+        {
+            [command.NetId] = -1
+        };
+
+        staggers.Value = dict;
 
         return UniTask.CompletedTask;
     }
