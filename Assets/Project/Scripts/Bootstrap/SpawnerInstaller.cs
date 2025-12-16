@@ -15,11 +15,14 @@ public class SpawnerInstaller : IInstaller
     public void Install(IContainerBuilder builder)
     {
         builder.Register<ISpawnService<MirageNet>, MirageSpawner>(Lifetime.Scoped);
+        builder.Register<ISpawnService<Normal>, NormalSpawner>(Lifetime.Scoped);
 
         builder.RegisterBuildCallback(container =>
         {
-            var spawnService = container.Resolve<ISpawnService<MirageNet>>();
-            spawnService.RegisterPools(config.Items);
+            var mirageSpawnService = container.Resolve<ISpawnService<MirageNet>>();
+            var normalSpawnService = container.Resolve<ISpawnService<Normal>>();
+            mirageSpawnService.RegisterPools(config.Items);
+            normalSpawnService.RegisterPools(config.Items);
         });
     }
 }

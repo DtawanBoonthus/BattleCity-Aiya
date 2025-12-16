@@ -9,8 +9,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 4990527065938667968}
-  - component: {fileID: 7258713806791015384}
-  - component: {fileID: 8558223840757660940}
   - component: {fileID: 9166756928522144056}
   m_Layer: 7
   m_Name: TankBullet
@@ -36,51 +34,6 @@ Transform:
   - {fileID: 4396159072492225582}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &7258713806791015384
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1018012552782033490}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 9b91ecbcc199f4492b9a91e820070131, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  SpawnSettings:
-    SendPosition: 1
-    SendRotation: 1
-    SendScale: 0
-    SendName: 0
-    SendActive: 2
-  _sceneId: 0
-  _prefabHash: -1389281701
-  ServerObjectManager: {fileID: 0}
-  ClientObjectManager: {fileID: 0}
-  _hasSpawned: 0
---- !u!114 &8558223840757660940
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1018012552782033490}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 4ad408b25fc5a054ba28ca1f9dd57371, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  SyncSettings:
-    From: 2
-    To: 3
-    Timing: 0
-    Interval: 0.1
-  target: {fileID: 4990527065938667968}
-  useLocalSpace: 1
-  clientAuthority: 0
-  clientSyncRate: 20
-  showDebugGui: 0
 --- !u!114 &9166756928522144056
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -93,11 +46,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 647aad9adba14d46864ebfb0abc83c53, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  SyncSettings:
-    From: 2
-    To: 3
-    Timing: 0
-    Interval: 0.1
 --- !u!1 &1705994727157573117
 GameObject:
   m_ObjectHideFlags: 0
@@ -173,7 +121,7 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 0
   m_SortingLayer: 0
-  m_SortingOrder: 0
+  m_SortingOrder: 1
   m_Sprite: {fileID: 21300000, guid: 78962bb49adc39947a1479995e741412, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0

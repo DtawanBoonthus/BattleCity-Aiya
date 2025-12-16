@@ -33,6 +33,12 @@ public class MirageSpawner : ISpawnService<MirageNet>
             }
 
             var networkIdentity = item.Prefab.GetComponent<NetworkIdentity>();
+
+            if (networkIdentity == null)
+            {
+                continue;
+            }
+
             var hash = networkIdentity.PrefabHash;
 
             if (!registered.Contains(hash))

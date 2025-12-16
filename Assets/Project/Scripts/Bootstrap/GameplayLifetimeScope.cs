@@ -18,6 +18,7 @@ namespace BC.Bootstrap
 
         protected override void Configure(IContainerBuilder builder)
         {
+            builder.Register<BulletVisualService>(Lifetime.Scoped);
             builder.RegisterInstance(tankConfig).As<ITankConfig>().AsSelf();
             builder.RegisterInstance(bulletConfig).As<IBulletConfig>().AsSelf();
 
@@ -38,6 +39,7 @@ namespace BC.Bootstrap
                 routing.Map<MatchControllerRouter>();
                 routing.Map<GameModeViewModelRouter>();
                 routing.Map<GameStartCountdownViewModelRouter>();
+                routing.Map<TankWorldUIRouter>();
             });
 
             builder.Register<MatchController>(Lifetime.Scoped).As<IStartable, IDisposable>();

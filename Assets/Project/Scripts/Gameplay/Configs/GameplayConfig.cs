@@ -24,7 +24,6 @@ namespace BC.Gameplay.Configs
         public IEnumerable<GameObject> NetworkPrefabs => new[]
         {
             tankPrefab,
-            bulletPrefab,
             gameStartCountdownPrefab,
             gameControllerPrefab,
             gameStartCountdownPrefab

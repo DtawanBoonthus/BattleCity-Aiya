@@ -12,4 +12,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4c437cec5f7f419aa1d1c3f98c75e2c2, type: 3}
   m_Name: PrefabPoolConfig
   m_EditorClassIdentifier: 
-  items: []
+  items:
+  - <Prefab>k__BackingField: {fileID: 1018012552782033490, guid: 4acaec47a396d1a4d925cdbf8598d64e, type: 3}
+    <StartSize>k__BackingField: 10
+    <MaxSize>k__BackingField: 0
+    <Unlimited>k__BackingField: 1

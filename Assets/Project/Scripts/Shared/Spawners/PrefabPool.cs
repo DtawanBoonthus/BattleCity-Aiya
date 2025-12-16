@@ -64,4 +64,9 @@ public class PrefabPool
         active.Remove(gameObject);
         available.Enqueue(gameObject);
     }
+
+    public bool Contains(GameObject obj)
+    {
+        return active.Contains(obj);
+    }
 }
