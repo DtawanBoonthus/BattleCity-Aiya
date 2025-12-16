@@ -1,4 +1,5 @@
 ﻿using BC.Gameplay.Configs;
+using BC.Gameplay.Tanks;
 using BC.Shared.Networks;
 using BC.Shared.Spawners;
 using Cysharp.Threading.Tasks;
@@ -17,9 +18,13 @@ public partial class GameControllerRouter
     [Inject] private readonly ISpawnService<MirageNet> spawnService = null!;
 
     private readonly Subject<Unit> gameStart = new();
+    private readonly Subject<Unit> gameReStart = new();
+    private readonly Subject<(uint winId, uint loseId)> tankDead = new();
 
     public IGameStartCountdown? GameStartCountdown { get; private set; } = null;
     public Observable<Unit> OnGameStart => gameStart;
+    public Observable<Unit> OnGameReStart => gameReStart;
+    public Observable<(uint winId, uint loseId)> TankDead => tankDead;
 
     private const string LOG_PREFIX = $"[{nameof(GameControllerRouter)}]";
 
@@ -42,6 +47,18 @@ public partial class GameControllerRouter
         }
 
         gameStart.OnNext(Unit.Default);
+        return UniTask.CompletedTask;
+    }
+
+    [Route]
+    private UniTask OnTankDeadCommand(TankDeadCommand command)
+    {
+        if (!networkContext.IsServer)
+        {
+            return UniTask.CompletedTask;
+        }
+
+        tankDead.OnNext((command.PlayerWin, command.PlayerLose));
         return UniTask.CompletedTask;
     }
 }

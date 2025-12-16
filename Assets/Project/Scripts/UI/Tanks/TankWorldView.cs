@@ -1,4 +1,5 @@
-﻿using Mirage;
+﻿using System.Collections.Generic;
+using Mirage;
 using R3;
 using TMPro;
 using UnityEngine;
@@ -19,7 +20,7 @@ namespace BC.UI
         {
             id = GetComponentInParent<NetworkBehaviour>().NetId;
             destroyDisposables ??= new CompositeDisposable();
-            router.Hp.Subscribe(UpdateHp).AddTo(destroyDisposables);
+            router.Hps.Subscribe(UpdateHp).AddTo(destroyDisposables);
         }
 
         private void OnDestroy()
@@ -28,14 +29,9 @@ namespace BC.UI
             destroyDisposables = null;
         }
 
-        private void UpdateHp((uint id, int hp) updateTuple)
+        private void UpdateHp(IReadOnlyDictionary<uint, int> playerHp)
         {
-            if (id != updateTuple.id)
-            {
-                return;
-            }
-
-            hpTMP.text = $"HP: {updateTuple.hp}";
+            hpTMP.text = $"HP: {playerHp[id]}";
         }
     }
 }

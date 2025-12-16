@@ -40,11 +40,13 @@ namespace BC.Bootstrap
                 routing.Map<GameModeViewModelRouter>();
                 routing.Map<GameStartCountdownViewModelRouter>();
                 routing.Map<TankWorldUIRouter>();
+                routing.Map<GameEndViewModelRouter>();
             });
 
             builder.Register<MatchController>(Lifetime.Scoped).As<IStartable, IDisposable>();
             builder.Register<IGameModeViewModel, GameModeViewModel>(Lifetime.Scoped);
             builder.Register<IGameStartCountdownViewModel, GameStartCountdownViewModel>(Lifetime.Scoped).As<IStartable, IDisposable>();
+            builder.Register<IGameEndViewModel, GameEndViewModel>(Lifetime.Scoped);
         }
     }
 }
